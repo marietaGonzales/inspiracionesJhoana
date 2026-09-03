@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Nuevo Pedido{% endblock %}
+{% block content %}
+<h2 class="text-center">🛒 Nuevo Pedido</h2>
+
+<form method="POST" action="/new_order" id="orderForm">
+    <div class="mb-3">
+        <label class="form-label">Nombre TikTok:</label>
+        <input type="text" name="customer_name" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <h4>Productos:</h4>
+        {% for product in products %}
+            <button type="button" class="btn btn-primary m-1 product-btn"
+                    data-id="{{ product.id }}"
+                    data-name="{{ item_map[product.product_id] }}"
+                    data-price="{{ product.price_to_sell }}">
+                {{ item_map[product.product_id] }}
+            </button>
+        {% endfor %}
+    </div>
+
+    <table class="table table-striped" id="orderTable">
+        <thead class="table-dark">
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Subtotal (Bs)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h4>Total: <span id="total">0</span> Bs</h4>
+
+    <button type="submit" class="btn btn-success">Checkout</button>
+</form>
+
+<script>
+    const productButtons = document.querySelectorAll(".product-btn");
+    const orderTableBody = document.querySelector("#orderTable tbody");
+    const totalSpan = document.getElementById("total");
+
+    let total = 0;
+
+    productButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const name = btn.dataset.name;
+            const price = parseFloat(btn.dataset.price);
+
+            // Crear fila
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${name}</td>
+                <td>
+                    <input type="number" class="form-control qty" value="1" min="1">
+                </td>
+                <td class="subtotal">${price.toFixed(2)}</td>
+            `;
+
+            orderTableBody.appendChild(row);
+            updateTotal();
+
+            // Escuchar cambios en cantidad
+            row.querySelector(".qty").addEventListener("input", () => {
+                const qty = parseInt(row.querySelector(".qty").value) || 0;
+                const subtotal = qty * price;
+                row.querySelector(".subtotal").textContent = subtotal.toFixed(2);
+                updateTotal();
+            });
+        });
+    });
+
+    function updateTotal() {
+        total = 0;
+        document.querySelectorAll(".subtotal").forEach(cell => {
+            total += parseFloat(cell.textContent) || 0;
+        });
+        totalSpan.textContent = total.toFixed(2);
+    }
+</script>
+{% endblock %}

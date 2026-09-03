@@ -114,6 +114,26 @@ def list_items():
     items = supabase_client.table("items").select("*").execute()
     return render_template("list_items.html", items=items.data)
 
+@app.route("/new_order", methods=["GET", "POST"])
+def new_order():
+    if request.method == "POST":
+        customer_name = request.form.get("customer_name")
+        selected_products = request.form.getlist("products")
+
+        # Aquí podrías guardar el pedido en Supabase en una tabla orders
+        # con relación a los productos seleccionados
+
+        return redirect(url_for("checkout_summary", customer_name=customer_name))
+
+    # Traer productos del catálogo
+    products = supabase_client.table("products").select("*").execute()
+    items = supabase_client.table("items").select("*").execute()
+
+    # Mapear product_id → nombre del item
+    item_map = {item["product_id"]: item["name"] for item in items.data}
+
+    return render_template("new_order.html", products=products.data, item_map=item_map)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

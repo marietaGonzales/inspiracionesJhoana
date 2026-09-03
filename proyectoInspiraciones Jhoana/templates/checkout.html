@@ -2,15 +2,58 @@
 {% block title %}Order Summary{% endblock %}
 {% block content %}
 <h2 class="text-center" style="color:#837FB3;">Order for {{name}}</h2>
-<table class="table table-bordered">
-    <tr><th>Producto</th><th>Cantidad</th><th>Subtotal</th></tr>
-    {% for row in rows %}
-        <tr><td>{{row.product}}</td><td>{{row.qty}}</td><td>{{row.subtotal}}</td></tr>
-    {% endfor %}
+<table class="table table-striped" id="orderTable">
+    <thead class="table-dark">
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Subtotal (Bs)</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
 </table>
-<h3 class="text-end">Total: {{total}}</h3>
+
+<h4>Total: <span id="total">0</span> Bs</h4>
+
 <div class="d-flex justify-content-center gap-3 mt-4">
     <button class="btn btn-primary" onclick="saveImage()">Guardar imagen</button>
-    <a href="/" class="btn btn-secondary">Nuevo Pedido</a>
+    <a href="/new_order" class="btn btn-secondary">Nuevo Pedido</a>
 </div>
+
+<script>
+    const productButtons = document.querySelectorAll(".product-btn");
+    const orderTableBody = document.querySelector("#orderTable tbody");
+    const totalSpan = document.getElementById("total");
+
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll(".subtotal").forEach(cell => {
+            total += parseFloat(cell.textContent) || 0;
+        });
+        totalSpan.textContent = total.toFixed(2);
+    }
+
+    productButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const name = btn.dataset.name;
+            const price = parseFloat(btn.dataset.price);
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${name}</td>
+                <td><input type="number" class="form-control qty" value="1" min="1"></td>
+                <td class="subtotal">${price.toFixed(2)}</td>
+            `;
+            orderTableBody.appendChild(row);
+            updateTotal();
+
+            row.querySelector(".qty").addEventListener("input", () => {
+                const qty = parseInt(row.querySelector(".qty").value) || 0;
+                row.querySelector(".subtotal").textContent = (qty * price).toFixed(2);
+                updateTotal();
+            });
+        });
+    });
+</script>
+
 {% endblock %}
