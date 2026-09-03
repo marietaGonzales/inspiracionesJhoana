@@ -1,20 +1,104 @@
 {% extends "base.html" %}
-{% block title %}Agregar Producto{% endblock %}
+{% block title %}Crear Producto{% endblock %}
 {% block content %}
-<h2 class="text-center" style="color:#837FB3;">Agregar Producto al Catálogo</h2>
-<form method="POST" action="/add_product">
+<h2 class="text-center">➕ Crear Producto</h2>
+<form method="POST" action="/add_product" id="productForm">
     <div class="mb-3">
         <label class="form-label">Seleccionar Item:</label>
-        <select name="product_id" class="form-select" required>
+        <select name="product_id" id="product_id" class="form-select" required>
             {% for item in items %}
-                <option value="{{ item.product_id }}">{{ item.name }} - {{ item.unitary_price }} Bs</option>
+                <option value="{{ item.product_id }}" data-price="{{ item.unitary_price }}">
+                    {{ item.name }} - {{ item.unitary_price }} Bs
+                </option>
             {% endfor %}
         </select>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Precio de Venta:</label>
-        <input type="number" step="0.01" name="price_to_sell" class="form-control" required>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label">Precio Item (Bs):</label>
+            <input type="number" step="0.01" id="item_price" class="form-control" readonly>
+        </div>
+        <div class="col">
+            <label class="form-label">Precio Sugerido (Bs):</label>
+            <input type="number" step="0.01" id="suggested_price" class="form-control" readonly>
+        </div>
     </div>
-    <button type="submit" class="btn btn-success">Guardar Producto</button>
+
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label">Precio de Venta (Bs):</label>
+            <input type="number" step="0.01" name="price_to_sell" id="price_to_sell" class="form-control" required>
+        </div>
+        <div class="col">
+            <label class="form-label">Ganancia (Bs):</label>
+            <input type="number" step="0.01" name="revenue" id="revenue" class="form-control" readonly>
+        </div>
+        <div class="col">
+            <label class="form-label">% Ganancia:</label>
+            <input type="number" step="0.01" name="profit_percentage" id="profit_percentage" class="form-control">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar</button>
 </form>
+
+<script>
+    const productSelect = document.getElementById("product_id");
+    const itemPriceInput = document.getElementById("item_price");
+    const suggestedPriceInput = document.getElementById("suggested_price");
+    const priceToSellInput = document.getElementById("price_to_sell");
+    const revenueInput = document.getElementById("revenue");
+    const profitPercentageInput = document.getElementById("profit_percentage");
+
+    function updateFromItem() {
+        const selectedOption = productSelect.options[productSelect.selectedIndex];
+        const itemPrice = parseFloat(selectedOption.dataset.price) || 0;
+
+        // Precio sugerido fijo
+        const suggestedPrice = (itemPrice * 1.20).toFixed(2);
+
+        itemPriceInput.value = itemPrice.toFixed(2);
+        suggestedPriceInput.value = suggestedPrice;
+
+        // Inicializar precio de venta = sugerido
+        if (!priceToSellInput.value) {
+            priceToSellInput.value = suggestedPrice;
+        }
+
+        updateFromSale();
+    }
+
+    function updateFromSale() {
+        const itemPrice = parseFloat(itemPriceInput.value) || 0;
+        const priceToSell = parseFloat(priceToSellInput.value) || 0;
+
+        const revenue = (priceToSell - itemPrice).toFixed(2);
+        const profitPercentage = itemPrice > 0 ? ((revenue / itemPrice) * 100).toFixed(2) : 0;
+
+        revenueInput.value = revenue;
+        profitPercentageInput.value = profitPercentage;
+    }
+
+    function updateFromPercentage() {
+        const itemPrice = parseFloat(itemPriceInput.value) || 0;
+        const profitPercentage = parseFloat(profitPercentageInput.value) || 0;
+
+        if (itemPrice > 0 && profitPercentage >= 0) {
+            const revenue = (itemPrice * profitPercentage / 100).toFixed(2);
+            const priceToSell = (itemPrice + parseFloat(revenue)).toFixed(2);
+
+            revenueInput.value = revenue;
+            priceToSellInput.value = priceToSell;
+        }
+    }
+
+    // Eventos
+    productSelect.addEventListener("change", updateFromItem);
+    priceToSellInput.addEventListener("input", updateFromSale);
+    profitPercentageInput.addEventListener("input", updateFromPercentage);
+
+    // Inicializar al cargar
+    window.onload = updateFromItem;
+</script>
 {% endblock %}

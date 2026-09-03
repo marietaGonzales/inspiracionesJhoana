@@ -60,17 +60,18 @@ def add_product():
     if request.method == "POST":
         product_id = request.form.get("product_id")
         price_to_sell = request.form.get("price_to_sell")
+        revenue = request.form.get("revenue")
+        profit_percentage = request.form.get("profit_percentage")
 
-        # Insert into products table
-        data = {
+        supabase_client.table("products").insert({
             "product_id": product_id,
-            "price_to_sell": price_to_sell
-        }
-        supabase_client.table("products").insert(data).execute()
+            "price_to_sell": price_to_sell,
+            "revenue": revenue,
+            "profit_percentage": profit_percentage
+        }).execute()
 
         return redirect(url_for("list_products"))
 
-    # Get items from Supabase to show in dropdown
     items = supabase_client.table("items").select("*").execute()
     return render_template("add_product.html", items=items.data)
 @app.route("/list_products")
@@ -92,7 +93,7 @@ def add_item():
         provider = request.form.get("provider")
         short_description = request.form.get("short_description")
         quantity = request.form.get("quantity")
-        time_of_purchase = request.form.get("time")
+        time_of_purchase = request.form.get("time_of_purchase")
         unitary_price = request.form.get("unitary_price")
 
         # Insertar en la tabla items
