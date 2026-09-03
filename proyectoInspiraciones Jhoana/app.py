@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request
+from supabase import create_client, Client
 import datetime
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+load_dotenv()
 
 products = {
     "Washitape": 10,
@@ -44,9 +48,12 @@ def checkout():
 
     return render_template("checkout.html", name=name, rows=rows, total=total)
 # Connect to Supabase
-url = "https://tfntvebjfawvmfypwshb.supabase.co"
-key = "sb_publishable_XOVAUeupiJsrOHb_YcVZiQ_dD25Hn3w"
-supabase_client = supabase.create_client(url, key)
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY")
+if not url or not key:
+    raise ValueError("Supabase URL or Key is missing. Check your .env file.")
+
+supabase_client: Client = create_client(url, key)
 
 @app.route("/add_product", methods=["GET", "POST"])
 def add_product():
@@ -66,6 +73,49 @@ def add_product():
     # Get items from Supabase to show in dropdown
     items = supabase_client.table("items").select("*").execute()
     return render_template("add_product.html", items=items.data)
+@app.route("/list_products")
+def list_products():
+    # Traer todos los productos desde Supabase
+    products = supabase_client.table("products").select("*").execute()
+    # También traer info de items para mostrar nombre
+    items = supabase_client.table("items").select("*").execute()
+
+    # Crear un diccionario para mapear product_id → nombre
+    item_map = {item["product_id"]: item["name"] for item in items.data}
+
+    # Pasar productos y nombres al template
+    return render_template("list_products.html", products=products.data, item_map=item_map)
+@app.route("/add_item", methods=["GET", "POST"])
+def add_item():
+    if request.method == "POST":
+        name = request.form.get("name")
+        provider = request.form.get("provider")
+        short_description = request.form.get("short_description")
+        quantity = request.form.get("quantity")
+        time_of_purchase = request.form.get("time")
+        unitary_price = request.form.get("unitary_price")
+
+        # Insertar en la tabla items
+        supabase_client.table("items").insert({
+            "name": name,
+            "provider": provider,
+            "short_description": short_description,
+            "time_of_purchase": time_of_purchase,
+            "quantity": quantity,
+            "unitary_price": unitary_price
+        }).execute()
+
+        return redirect(url_for("list_items"))
+
+    return render_template("add_item.html")
+@app.route("/list_items")
+def list_items():
+    items = supabase_client.table("items").select("*").execute()
+    return render_template("list_items.html", items=items.data)
+
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
+
+

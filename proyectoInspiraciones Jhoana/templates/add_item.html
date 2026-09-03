@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Crear Item{% endblock %}
+{% block content %}
+<h2 class="text-center">➕ Crear Item</h2>
+<form method="POST" action="/add_item">
+    <div class="col-md-3">
+        <label class="form-label">Nombre del Item:</label>
+        <input type="text" name="name" class="form-control" required>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Proveedor</label>
+        <input type="text" name="provider" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" name="short_description" aria-label="Descripción"></textarea>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Cantidad</label>
+        <input type="text" name="quantity" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Precio Unitario:</label>
+        <input type="number" step="0.01" name="unitary_price" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-success">Guardar</button>
+</form>
+{% endblock %}

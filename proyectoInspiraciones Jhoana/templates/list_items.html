@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Items{% endblock %}
+{% block content %}
+<h2 class="text-center">📋 Lista de Items</h2>
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Precio Unitario</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.unitary_price }} Bs</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
