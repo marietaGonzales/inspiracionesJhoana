@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Agregar Producto{% endblock %}
+{% block content %}
+<h2 class="text-center" style="color:#837FB3;">Agregar Producto al Catálogo</h2>
+<form method="POST" action="/add_product">
+    <div class="mb-3">
+        <label class="form-label">Seleccionar Item:</label>
+        <select name="product_id" class="form-select" required>
+            {% for item in items %}
+                <option value="{{ item.product_id }}">{{ item.name }} - {{ item.unitary_price }} Bs</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Precio de Venta:</label>
+        <input type="number" step="0.01" name="price_to_sell" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-success">Guardar Producto</button>
+</form>
+{% endblock %}
