@@ -1,0 +1,11 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+.btn-primary {
+    background-color: #D69EC7;
+    border: none;
+}
+.btn-secondary {
+    background-color: #837FB3;
+    border: none;
+}

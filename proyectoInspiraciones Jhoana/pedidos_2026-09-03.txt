@@ -1,0 +1,2 @@
+2026-09-03 10:38:27 | test2 | Separador Animalitos:1,Sellos:1,Postit Animalitos:1,Cuaderno Flexible:1 | Total: 71 
+2026-09-03 10:38:51 | test2 | Separador Animalitos:1,Sellos:1,Postit Animalitos:1,Cuaderno Flexible:1,Separador Flores:1 | Total: 79 

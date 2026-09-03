@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Order Summary{% endblock %}
+{% block content %}
+<h2 class="text-center" style="color:#837FB3;">Order for {{name}}</h2>
+<table class="table table-bordered">
+    <tr><th>Producto</th><th>Cantidad</th><th>Subtotal</th></tr>
+    {% for row in rows %}
+        <tr><td>{{row.product}}</td><td>{{row.qty}}</td><td>{{row.subtotal}}</td></tr>
+    {% endfor %}
+</table>
+<h3 class="text-end">Total: {{total}}</h3>
+<div class="d-flex justify-content-center gap-3 mt-4">
+    <button class="btn btn-primary" onclick="saveImage()">Guardar imagen</button>
+    <a href="/" class="btn btn-secondary">Nuevo Pedido</a>
+</div>
+{% endblock %}

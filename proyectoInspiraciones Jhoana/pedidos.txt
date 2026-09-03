@@ -1,0 +1,11 @@
+2026-09-02 16:24:17 | dina | 
+2026-09-02 16:24:34 | dina | Washitape:2,Escenario:1,Sellos:1,Separador Animalitos:1,Separador Flores:1,Postit Animalitos:1,Organigasto:1,Memopad:1,Separador Gatito:1,Separador Grande:1
+2026-09-03 10:11:57 | rtrtrt | Washitape:1,Separador Flores:1,Separador Animalitos:1,Postit Animalitos:1,Cuaderno Flexible:1| None 
+2026-09-03 10:12:28 | rtrtrt | Escenario:1,Separador Flores:1,Separador Animalitos:1 | None 
+2026-09-03 10:14:53 | rtrtrt | Separador Animalitos:2,Postit Animalitos:1,Cuaderno Flexible:1,Sellos:2 | None 
+2026-09-03 10:14:56 | rtrtrt | Separador Animalitos:2,Postit Animalitos:1,Cuaderno Flexible:1,Sellos:2 | None 
+2026-09-03 10:14:59 | rtrtrt | Separador Animalitos:2,Postit Animalitos:1,Cuaderno Flexible:1,Sellos:2 | None 
+2026-09-03 10:15:08 | rtrtrt | Sellos:1,Postit Animalitos:1,Cuaderno Flexible:1,Organigasto:1 | None 
+2026-09-03 10:15:15 | rtrtrt | Sellos:1,Postit Animalitos:1,Cuaderno Flexible:1,Organigasto:1 | None 
+2026-09-03 10:16:03 | test1 | Separador Animalitos:2,Postit Animalitos:1,Cuaderno Flexible:1,Organigasto:1 | None 
+2026-09-03 10:25:34 | test2 | Separador Animalitos:1,Sellos:1,Postit Animalitos:1,Cuaderno Flexible:1 | 71 
