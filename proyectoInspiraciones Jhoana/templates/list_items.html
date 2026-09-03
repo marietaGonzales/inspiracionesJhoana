@@ -6,6 +6,8 @@
     <thead class="table-dark">
         <tr>
             <th>Nombre</th>
+            <th>Provedor</th>
+            <th>Cantidad</th>
             <th>Precio Unitario</th>
         </tr>
     </thead>
@@ -13,6 +15,8 @@
         {% for item in items %}
         <tr>
             <td>{{ item.name }}</td>
+            <td>{{ item.provider }}</td>
+            <td>{{ item.quantity }}</td>
             <td>{{ item.unitary_price }} Bs</td>
         </tr>
         {% endfor %}
